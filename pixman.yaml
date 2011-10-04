@@ -1,0 +1,23 @@
+Name: pixman
+Summary: Pixel manipulation library
+Description: |
+    pixman is a library that provides low-level pixel manipulation
+    features such as image compositing and trapezoid rasterization.
+Version: 0.22.0
+Release: 1
+Group: System/Libraries
+License: MIT
+URL: http://www.x.org/
+Sources:
+    - http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.bz2
+Patches:
+    - 0.22.0-fixes.patch
+    - arm:pixman-0.22.0-arm-revert-Do-CPU-features-detection-from-constructor-function.patch
+
+Configure: configure
+SubPackages:
+    - Name: devel
+      Summary: Development components for the pixman library
+      Description: |
+       pixman Development Library 
+      Group: Development/Libraries

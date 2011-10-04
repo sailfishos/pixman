@@ -1,0 +1,54 @@
+* Wed Jul 27 2011 Carsten Munk <carsten@maemo.org> - 0.22.0
+- ARM build fix: Revert Do-CPU-features-detection-from-constructor-function
+  on ARM builds. This blows up gobject-introspection when running inside
+  qemu-arm. 
+
+* Mon Jun 13 2011 Liu, Xinyun <xinyun.liu@intel.com> - 0.22.0
+- Updated to  0.22.0 
+
+* Fri Apr 29 2011 Junfeng Dong <junfeng.dong@intel.com> - 0.20.0
+- Fix the error caused by updating libtool.
+
+* Mon Nov 15 2010 Liu Xinyun <xinyun.liu@intel.com> - 0.20.0
+- Fix BMC #5012. Add SSSE3 version composite_line_src_x888_8888.
+- cairo-trace shows image-rgba gvim-0 has 368% speedup.
+
+* Thu Oct 28 2010 Liu Xinyun <xinyun.liu@intel.com> - 0.20.0
+- Update to 0.20.0
+
+* Tue Oct 12 2010 Liu Xinyun <xinyun.liu@intel.com> - 0.19.4
+- Update to 0.19.4
+
+* Tue Jul 13 2010 Zhang Qiang<qiang.z.zhang@intel.com> - 0.18.2
+- pixman 0.18.2
+
+* Fri Feb 05 2010 Li Peng <peng.li@intel.com> - 0.17.4
+- pixman 0.17.4
+
+* Wed Oct 28 2009 Li Peng <peng.li@intel.com> - 0.16.2
+- pixman 0.16.2
+
+* Tue Apr 21 2009 Zhu Yanhai<yanhai.zhu@intel.com> 0.15.2
+- Update to 0.15.0
+
+* Sat Feb 14 2009 Anas Nashif <anas.nashif@intel.com> 0.14.0
+- Update to 0.14.0
+
+* Tue Dec 16 2008 Anas Nashif <anas.nashif@intel.com> 0.13.2
+- Update spec file using latest spec-builder
+
+* Tue Dec 16 2008 Anas Nashif <anas.nashif@intel.com> 0.13.2
+- Update spec file using latest spec-builder
+
+* Wed Dec 10 2008 Anas Nashif <anas.nashif@intel.com> 0.13.2
+- Use spec-builder to reinit spec
+
+* Fri Nov 28 2008 Peng Li <peng.li@intel.com> 0.13.2
+- update to version 0.13.2
+
+* Thu Sep 25 2008 Anas Nashif <anas.nashif@intel.com> 0.12.0
+- update to version 0.12
+
+* Sat Sep 20 2008 Anas Nashif <anas.nashif@intel.com> 0.11.10
+- update to version 0.11.10
+

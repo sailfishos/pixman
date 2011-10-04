@@ -1,0 +1,68 @@
+diff -ru pixman-0.22.0-orig/configure.ac pixman-0.22.0/configure.ac
+--- pixman-0.22.0-orig/configure.ac	2011-07-27 10:49:54.704727300 +0200
++++ pixman-0.22.0/configure.ac	2011-07-27 10:50:30.337446851 +0200
+@@ -774,33 +774,6 @@
+ AC_SUBST(PTHREAD_LDFLAGS)
+ AC_SUBST(PTHREAD_LIBS)
+ 
+-dnl =====================================
+-dnl __attribute__((constructor))
+-
+-support_for_attribute_constructor=no
+-
+-AC_MSG_CHECKING(for __attribute__((constructor)))
+-AC_LINK_IFELSE([
+-#if defined(__GNUC__) && (__GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 7))
+-/* attribute 'constructor' is supported since gcc 2.7, but some compilers
+- * may only pretend to be gcc, so let's try to actually use it
+- */
+-static int x = 1;
+-static void __attribute__((constructor)) constructor_function () { x = 0; }
+-int main (void) { return x; }
+-#else
+-#error not gcc or gcc version is older than 2.7
+-#endif
+-], support_for_attribute_constructor=yes)
+-
+-if test x$support_for_attribute_constructor = xyes; then
+-   AC_DEFINE([TOOLCHAIN_SUPPORTS_ATTRIBUTE_CONSTRUCTOR],
+-             [],[Whether the tool chain supports __attribute__((constructor))])
+-fi
+-
+-AC_MSG_RESULT($support_for_attribute_constructor)
+-AC_SUBST(TOOLCHAIN_SUPPORTS_ATTRIBUTE_CONSTRUCTOR)
+-
+ AC_OUTPUT([pixman-1.pc
+            pixman-1-uninstalled.pc
+            Makefile
+Only in pixman-0.22.0: configure.ac.orig
+diff -ru pixman-0.22.0-orig/pixman/pixman.c pixman-0.22.0/pixman/pixman.c
+--- pixman-0.22.0-orig/pixman/pixman.c	2011-07-27 10:49:54.751726932 +0200
++++ pixman-0.22.0/pixman/pixman.c	2011-07-27 10:50:30.339446838 +0200
+@@ -30,23 +30,14 @@
+ 
+ #include <stdlib.h>
+ 
+-static pixman_implementation_t *global_implementation;
+-
+-#ifdef TOOLCHAIN_SUPPORTS_ATTRIBUTE_CONSTRUCTOR
+-static void __attribute__((constructor))
+-pixman_constructor (void)
+-{
+-    global_implementation = _pixman_choose_implementation ();
+-}
+-#endif
+-
+ static force_inline pixman_implementation_t *
+ get_implementation (void)
+ {
+-#ifndef TOOLCHAIN_SUPPORTS_ATTRIBUTE_CONSTRUCTOR
++    static pixman_implementation_t *global_implementation;
++
+     if (!global_implementation)
+ 	global_implementation = _pixman_choose_implementation ();
+-#endif
++
+     return global_implementation;
+ }
+ 
