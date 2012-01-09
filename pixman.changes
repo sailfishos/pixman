@@ -1,3 +1,9 @@
+* Mon Jan 09 2012 Marko Saukko <marko.saukko@cybercom.com> - 0.24.0
+- Fixes MER#35: Update to version 0.24.0
+- Dropped patches: 
+  - 0.22.0-fixes.patch
+  - pixman-0.22.0-arm-revert-Do-CPU-features-detection-from-constructor-function.patch
+
 * Wed Jul 27 2011 Carsten Munk <carsten@maemo.org> - 0.22.0
 - ARM build fix: Revert Do-CPU-features-detection-from-constructor-function
   on ARM builds. This blows up gobject-introspection when running inside
