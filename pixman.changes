@@ -1,3 +1,10 @@
+* Thu Nov 08 2012 Marko Saukko <marko.saukko@jollamobile.com> - 0.28.0
+- Update to 0.28.0
+- Fix build with mipsel by adding --disable-loongson-mmi
+
+* Mon Jul 30 2012 Amir Hassan <amir@viel-zu.org> - 0.26.2
+- Fixes MER#469: Update to version 0.26.0
+
 * Wed Jan 25 2012 Marko Saukko <marko.saukko@gmail.com> - 0.24.2
 - Update to version 0.24.2
 
