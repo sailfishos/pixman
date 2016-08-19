@@ -53,8 +53,8 @@ AC_PREREQ([2.57])
 #
 
 m4_define([pixman_major], 0)
-m4_define([pixman_minor], 32)
-m4_define([pixman_micro], 4)
+m4_define([pixman_minor], 34)
+m4_define([pixman_micro], 0)
 
 m4_define([pixman_version],[pixman_major.pixman_minor.pixman_micro])
 
@@ -184,6 +184,7 @@ AC_SUBST(LT_VERSION_INFO)
 
 PIXMAN_CHECK_CFLAG([-Wall])
 PIXMAN_CHECK_CFLAG([-Wdeclaration-after-statement])
+PIXMAN_CHECK_CFLAG([-Wno-unused-local-typedefs])
 PIXMAN_CHECK_CFLAG([-fno-strict-aliasing])
 
 dnl =========================================================================
@@ -346,15 +347,27 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #error "Need GCC >= 3.4 for MMX intrinsics"
 #endif
 #include <mmintrin.h>
+#include <stdint.h>
+
+/* Check support for block expressions */
+#define _mm_shuffle_pi16(A, N)						\
+    ({									\
+	__m64 ret;							\
+									\
+	/* Some versions of clang will choke on K */ 			\
+	asm ("pshufw %2, %1, %0\n\t"					\
+	     : "=y" (ret)						\
+	     : "y" (A), "K" ((const int8_t)N)				\
+	);								\
+									\
+	ret;								\
+    })
+
 int main () {
     __m64 v = _mm_cvtsi32_si64 (1);
     __m64 w;
 
-    /* Some versions of clang will choke on K */
-    asm ("pshufw %2, %1, %0\n\t"
-        : "=y" (w)
-        : "y" (v), "K" (5)
-    );
+    w = _mm_shuffle_pi16(v, 5);
 
     /* Some versions of clang will choke on this */
     asm ("pmulhuw %1, %0\n\t"
@@ -416,10 +429,11 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #include <mmintrin.h>
 #include <xmmintrin.h>
 #include <emmintrin.h>
+int param;
 int main () {
-    __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
+    __m128i a = _mm_set1_epi32 (param), b = _mm_set1_epi32 (param + 1), c;
 	c = _mm_xor_si128 (a, b);
-    return 0;
+    return _mm_cvtsi128_si32(c);
 }]])], have_sse2_intrinsics=yes)
 CFLAGS=$xserver_save_CFLAGS
 
@@ -460,10 +474,11 @@ AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
 #include <xmmintrin.h>
 #include <emmintrin.h>
 #include <tmmintrin.h>
+int param;
 int main () {
-    __m128i a = _mm_set1_epi32 (0), b = _mm_set1_epi32 (0), c;
+    __m128i a = _mm_set1_epi32 (param), b = _mm_set1_epi32 (param + 1), c;
     c = _mm_maddubs_epi16 (a, b);
-    return 0;
+    return _mm_cvtsi128_si32(c);
 }]])], have_ssse3_intrinsics=yes)
 CFLAGS=$xserver_save_CFLAGS
 
@@ -890,6 +905,11 @@ if test x$have_feenableexcept = xyes; then
    AC_DEFINE(HAVE_FEENABLEEXCEPT, 1, [Whether we have feenableexcept()])
 fi
 
+AC_CHECK_DECL([FE_DIVBYZERO],
+	[AC_DEFINE(HAVE_FEDIVBYZERO, 1, [Whether we have FE_DIVBYZERO])],
+	[],
+	[[#include <fenv.h>]])
+
 AC_CHECK_FUNC(gettimeofday, have_gettimeofday=yes, have_gettimeofday=no)
 AC_CHECK_HEADER(sys/time.h, have_sys_time_h=yes, have_sys_time_h=no)
 if test x$have_gettimeofday = xyes && test x$have_sys_time_h = xyes; then
@@ -1059,6 +1079,24 @@ if test x$support_for_builtin_clz = xyes; then
 fi
 
 AC_MSG_RESULT($support_for_builtin_clz)
+
+dnl =====================================
+dnl GCC vector extensions
+
+support_for_gcc_vector_extensions=no
+
+AC_MSG_CHECKING(for GCC vector extensions)
+AC_LINK_IFELSE([AC_LANG_SOURCE([[
+unsigned int __attribute__ ((vector_size(16))) e, a, b;
+int main (void) { e = a - ((b << 27) + (b >> (32 - 27))) + 1; return e[0]; }
+]])], support_for_gcc_vector_extensions=yes)
+
+if test x$support_for_gcc_vector_extensions = xyes; then
+   AC_DEFINE([HAVE_GCC_VECTOR_EXTENSIONS], [],
+             [Whether the compiler supports GCC vector extensions])
+fi
+
+AC_MSG_RESULT($support_for_gcc_vector_extensions)
 
 dnl ==================
 dnl libpng
