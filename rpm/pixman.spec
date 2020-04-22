@@ -1,9 +1,8 @@
 Name:       pixman
 
 Summary:    Pixel manipulation library
-Version:    0.32.4
+Version:    0.40.0
 Release:    1
-Group:      System/Libraries
 License:    MIT
 URL:        http://www.x.org/
 Source0:    http://cairographics.org/releases/%{name}-%{version}.tar.gz
@@ -16,14 +15,13 @@ features such as image compositing and trapezoid rasterization.
 
 %package devel
 Summary:    Development components for the pixman library
-Group:      Development/Libraries
 Requires:   %{name} = %{version}-%{release}
 
 %description devel
-pixman Development Library 
+pixman Development Library
 
 %prep
-%setup -q -n %{name}-%{version}/libpixman
+%autosetup -n %{name}-%{version}/upstream
 
 %build
 %autogen --disable-static \
