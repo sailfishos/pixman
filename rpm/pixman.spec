@@ -32,7 +32,7 @@ pixman Development Library
     --disable-loongson-mmi
 %endif
 
-make %{?jobs:-j%jobs}
+%make_build
 
 %install
 rm -rf %{buildroot}
@@ -44,6 +44,7 @@ rm -rf %{buildroot}
 
 %files
 %defattr(-,root,root,-)
+%license COPYING
 %{_libdir}/libpixman-1*.so.*
 
 %files devel
