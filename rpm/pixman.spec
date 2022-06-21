@@ -4,8 +4,8 @@ Summary:    Pixel manipulation library
 Version:    0.40.0
 Release:    1
 License:    MIT
-URL:        http://www.x.org/
-Source0:    http://cairographics.org/releases/%{name}-%{version}.tar.gz
+URL:        https://github.com/sailfishos/pixman
+Source0:    %{name}-%{version}.tar.gz
 Requires(post): /sbin/ldconfig
 Requires(postun): /sbin/ldconfig
 
