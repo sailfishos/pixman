@@ -1,7 +1,7 @@
 Name:       pixman
 
 Summary:    Pixel manipulation library
-Version:    0.40.0
+Version:    0.42.2
 Release:    1
 License:    MIT
 URL:        https://github.com/sailfishos/pixman
@@ -35,7 +35,6 @@ pixman Development Library
 %make_build
 
 %install
-rm -rf %{buildroot}
 %make_install
 
 %post -p /sbin/ldconfig
